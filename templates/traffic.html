@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4">网络流量监控</h2>
+    
+    <div class="card">
+        <div class="card-header">
+            <h5>实时流量数据</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>时间戳</th>
+                            <th>源IP</th>
+                            <th>目标IP</th>
+                            <th>协议</th>
+                            <th>包大小</th>
+                            <th>源端口</th>
+                            <th>目标端口</th>
+                            <th>Flags</th>
+                            <th>TTL</th>
+                            <th>源MAC</th>
+                            <th>目标MAC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for packet in packets %}
+                        <tr>
+                            <td>{{ packet.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td>{{ packet.src_ip }}</td>
+                            <td>{{ packet.dst_ip }}</td>
+                            <td>{{ packet.protocol }}</td>
+                            <td>{{ packet.length }} bytes</td>
+                            <td>{{ packet.src_port or '' }}</td>
+                            <td>{{ packet.dst_port or '' }}</td>
+                            <td>{{ packet.flags or '' }}</td>
+                            <td>{{ packet.ttl or '' }}</td>
+                            <td>{{ packet.src_mac or '' }}</td>
+                            <td>{{ packet.dst_mac or '' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

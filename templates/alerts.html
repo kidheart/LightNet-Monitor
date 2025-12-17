@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4">告警信息</h2>
+    
+    <div class="card">
+        <div class="card-header">
+            <h5>系统告警记录</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>时间戳</th>
+                            <th>告警类型</th>
+                            <th>描述</th>
+                            <th>源IP</th>
+                            <th>目标IP</th>
+                            <th>源端口</th>
+                            <th>目标端口</th>
+                            <th>协议</th>
+                            <th>级别</th>
+                            <th>分类</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for alert in alerts %}
+                        <tr>
+                            <td>{{ alert.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td>{{ alert.alert_type }}</td>
+                            <td>{{ alert.description }}</td>
+                            <td>{{ alert.source_ip }}</td>
+                            <td>{{ alert.dst_ip or '' }}</td>
+                            <td>{{ alert.src_port or '' }}</td>
+                            <td>{{ alert.dst_port or '' }}</td>
+                            <td>{{ alert.protocol or '' }}</td>
+                            <td>{{ alert.severity or '' }}</td>
+                            <td>{{ alert.category or '' }}</td>
+                            <td>
+                                {% if alert.status == 'active' %}
+                                <span class="badge bg-danger">活动</span>
+                                {% else %}
+                                <span class="badge bg-success">已解决</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if alert.status == 'active' %}
+                                <form action="{{ url_for('resolve_alert', alert_id=alert.id) }}" method="POST" style="display: inline;">
+                                    <button type="submit" class="btn btn-sm btn-success">标记为已解决</button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
